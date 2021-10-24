@@ -18,6 +18,7 @@ app.use(bodyParser.json());
 
 app.get("/items", async function (req, res) {
   const todoList = await TodoList.findAll();
+
   res.send(todoList);
 });
 
@@ -34,6 +35,17 @@ app.delete("/items", async (req, res) => {
   if (req.body.id || req.body.id === 0) {
     const item = await TodoList.findByPk(req.body.id);
     item.delete = true;
+    item.save();
+    res.send({
+      status: 0,
+    });
+  }
+});
+
+app.put("/items", async (req, res) => {
+  if (req.body.id || req.body.id === "0") {
+    const item = await TodoList.findByPk(req.body.id);
+    item.done = true;
     item.save();
     res.send({
       status: 0,
